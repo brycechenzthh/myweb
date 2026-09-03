@@ -53,22 +53,22 @@
   .toolbar select{height:32px;border:1px solid var(--border);border-radius:6px;padding:0 6px;font-size:13px;background:#fff;color:var(--text)}
 
   /* 正文编辑区 */
-  .content{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:28px 32px;min-height:400px;background:#fff;font-size:15.5px;line-height:1.85;color:var(--text);outline:none}
+  .content{border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:28px 32px;min-height:400px;background:#fff;font-size:15.5px;line-height:1.85;color:var(--text);outline:none;overflow-wrap:break-word;word-break:break-word}
   .content[contenteditable="true"]{background:#fffef7}
   .content h1{font-size:24px;margin:18px 0 10px;font-weight:700}
   .content h2{font-size:20px;margin:16px 0 8px;font-weight:700}
   .content h3{font-size:17px;margin:14px 0 6px;font-weight:700}
   .content p{margin:10px 0}
   .content ul,.content ol{margin:10px 0 10px 24px}
-  .content li{margin:4px 0}
+  .content li{margin:4px 0;overflow-wrap:break-word;word-break:break-word}
   .content blockquote{border-left:3px solid var(--primary);padding:6px 14px;margin:12px 0;color:var(--text-2);background:var(--primary-soft);border-radius:0 6px 6px 0}
   .content img{max-width:100%;border-radius:8px;margin:12px 0}
-  .content a{color:var(--primary);text-decoration:underline}
-  .content pre{background:#1e293b;color:#e2e8f0;padding:14px 16px;border-radius:8px;overflow-x:auto;margin:12px 0;font-size:13.5px;line-height:1.6}
-  .content code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:13.5px}
-  .content pre code{background:none;padding:0}
+  .content a{color:var(--primary);text-decoration:underline;word-break:break-all;overflow-wrap:break-word}
+  .content pre{background:#1e293b;color:#e2e8f0;padding:14px 16px;border-radius:8px;overflow-x:auto;margin:12px 0;font-size:13.5px;line-height:1.6;max-width:100%}
+  .content code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:13.5px;word-break:break-all}
+  .content pre code{background:none;padding:0;white-space:pre-wrap;word-break:break-all}
   .content table{border-collapse:collapse;margin:12px 0;width:100%}
-  .content td,.content th{border:1px solid var(--border);padding:8px 12px}
+  .content td,.content th{border:1px solid var(--border);padding:8px 12px;word-break:break-all}
   .content-empty{color:var(--text-3);font-style:italic}
 
   .save-bar{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
