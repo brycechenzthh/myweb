@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>链接 · cxkk 技术小站</title>
+<meta name="description" content="cxkk 常用工具与资源链接管理">
+<style>
+  :root{
+    --bg:#eef4fb;
+    --card:#ffffff;
+    --primary:#2f6fed;
+    --primary-soft:#e4edfd;
+    --text:#1f2d3d;
+    --text-2:#5a6b7f;
+    --text-3:#8a9ab0;
+    --border:#e3ebf6;
+    --radius:12px;
+    --shadow:0 2px 10px rgba(47,111,237,.06);
+    --danger:#e5484d;
+    --danger-soft:#fdecec;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* 顶部导航 */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:0 20px;
+    height:60px;display:flex;align-items:center;gap:28px;
+  }
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--primary)}
+  .logo-badge{
+    width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2f6fed,#5aa0ff);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;
+  }
+  .nav-menu{display:flex;gap:22px;font-size:15px;color:var(--text-2)}
+  .nav-menu a:hover{color:var(--primary)}
+  .nav-menu a.active{color:var(--primary);font-weight:600}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .nav-link{
+    font-size:14.5px;color:var(--text-2);cursor:pointer;background:#fff;
+    padding:7px 16px;border:1px solid var(--border);border-radius:8px;transition:.15s;
+  }
+  .nav-link:hover,.nav-link.active{color:var(--primary);border-color:var(--primary)}
+  .nav-btn{background:var(--primary);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:14px;cursor:pointer}
+  .nav-btn:hover{opacity:.9}
+
+  /* 主体 */
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 40px}
+  .page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  .page-head h1{font-size:24px}
+  .btn-add{
+    background:var(--primary);color:#fff;border:none;border-radius:9px;
+    padding:9px 20px;font-size:14.5px;cursor:pointer;font-weight:600;
+  }
+  .btn-add:hover{opacity:.9}
+  .tip{font-size:12.5px;color:var(--text-3);margin-bottom:18px}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .list-head,.item{
+    display:grid;grid-template-columns:auto 150px 1fr auto;
+    gap:16px;align-items:center;padding:13px 20px;
+  }
+  .list-head{
+    background:var(--primary-soft);font-size:12.5px;color:var(--text-2);font-weight:600;
+    border-bottom:1px solid var(--border);
+  }
+  .list-head .drag-handle{visibility:hidden}
+  .item{border-bottom:1px dashed var(--border)}
+  .item:last-child{border-bottom:none}
+  .item:hover{background:#f7faff}
+  .item.dragging{opacity:.4}
+  .item.drag-over{border-top:2px solid var(--primary)}
+  .drag-handle{cursor:grab;color:var(--text-3);font-size:18px;user-select:none;padding:0 4px;line-height:1}
+  .drag-handle:active{cursor:grabbing}
+  .i-label{font-size:14.5px;font-weight:600;word-break:break-all}
+  .i-value{
+    font-size:12.5px;color:var(--text-2);background:#f4f7fc;border-radius:7px;
+    padding:7px 12px;font-family:Consolas,Monaco,"Courier New",monospace;word-break:break-all;line-height:1.5;
+  }
+  .i-ops{display:flex;gap:8px;justify-content:flex-end}
+  .btn-sm{
+    border:none;border-radius:7px;padding:6px 14px;font-size:13px;cursor:pointer;
+    background:var(--primary);color:#fff;flex-shrink:0;
+  }
+  .btn-sm.ghost{background:var(--primary-soft);color:var(--primary)}
+  .btn-sm.danger{background:var(--danger-soft);color:var(--danger)}
+  .btn-sm:hover{opacity:.85}
+
+  /* 新增/编辑表单 */
+  .form-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px;margin-top:20px;
+  }
+  .form-card h3{font-size:16px;margin-bottom:14px}
+  .form-row{display:flex;gap:12px;flex-wrap:wrap}
+  .form-row input{
+    flex:1;min-width:220px;border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;font-size:14px;background:#fbfcfe;color:var(--text);
+  }
+  .form-row input:focus{outline:none;border-color:var(--primary);background:#fff}
+  .form-ops{display:flex;gap:10px;margin-top:14px}
+
+  .empty{text-align:center;color:var(--text-3);padding:50px 0}
+
+  /* 登录遮罩 */
+  .login-mask{
+    position:fixed;inset:0;background:rgba(15,30,55,.55);z-index:300;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .login-box{
+    background:#fff;border-radius:14px;width:min(380px,100%);
+    padding:28px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25);
+  }
+  .login-box h2{font-size:18px;margin-bottom:6px}
+  .login-box .sub{font-size:12.5px;color:var(--text-3);margin-bottom:18px}
+  .login-box input{
+    width:100%;border:1px solid var(--border);border-radius:8px;
+    padding:11px 14px;font-size:14px;background:#fbfcfe;color:var(--text);margin-bottom:12px;
+  }
+  .login-box input:focus{outline:none;border-color:var(--primary);background:#fff}
+  .login-err{color:var(--danger);font-size:12.5px;margin-bottom:10px;min-height:18px}
+  .login-btn{
+    width:100%;border:none;border-radius:8px;padding:11px;font-size:14.5px;
+    background:var(--primary);color:#fff;cursor:pointer;font-weight:600;
+  }
+  .login-btn:hover{opacity:.9}
+
+  footer{border-top:1px solid var(--border);background:var(--card);padding:26px 20px;text-align:center;color:var(--text-3);font-size:13px}
+  footer .brand{color:var(--text-2);font-weight:600}
+
+  @media (max-width:700px){
+    .list-head{display:none}
+    .item{grid-template-columns:1fr;gap:8px}
+    .i-ops{justify-content:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-badge" id="logoBadge">cx</span>
+      <span id="siteName">cxkk</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="/">首页</a>
+      <a href="/articles.html">全部文章</a>
+      <a href="/apps.html">软件</a>
+      <a href="/tutorials.html">教程</a>
+      <a href="/about.html">关于</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-link active" href="/links.html">链接</a>
+      <a class="nav-btn" href="/about.html#login">登录</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>链接 / 常用资源</h1>
+    <button class="btn-add" id="btnAdd">＋ 新增链接</button>
+  </div>
+  <div class="tip">点击「复制」复制链接或命令；支持新增、编辑、删除，修改会自动保存并全站生效。</div>
+
+  <div class="card">
+    <div class="list-head">
+      <span class="drag-handle">☰</span>
+      <span>名称</span>
+      <span>链接 / 命令</span>
+      <span style="text-align:right">操作</span>
+    </div>
+    <div id="list"></div>
+  </div>
+
+  <div class="form-card" id="formCard" style="display:none">
+    <h3 id="formTitle">新增链接</h3>
+    <div class="form-row">
+      <input id="fLabel" placeholder="名称（如 WIN11 / 激活命令）" maxlength="50">
+      <input id="fValue" placeholder="链接地址或终端命令" maxlength="500">
+    </div>
+    <div class="form-ops">
+      <button class="btn-sm" id="btnSave" onclick="saveForm()">保存</button>
+      <button class="btn-sm ghost" onclick="closeForm()">取消</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><span class="brand">© 2023-2026 By cxkk</span> &nbsp;·&nbsp; 保持热爱，折腾不止</p>
+</footer>
+
+<!-- 登录遮罩 -->
+<div class="login-mask" id="loginMask">
+  <div class="login-box">
+    <h2>管理登录</h2>
+    <div class="sub">输入管理密码后可编辑、新增、删除链接</div>
+    <input type="password" id="loginPwd" placeholder="请输入管理密码" autocomplete="current-password">
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="btnLogin" onclick="doLogin()">登 录</button>
+  </div>
+</div>
+
+<script>
+  let LINKS = [];
+  let editingIdx = -1;
+  let TOKEN = localStorage.getItem('cxkk_token') || '';
+
+  async function checkAuth(){
+    if (!TOKEN) return false;
+    try {
+      const res = await fetch('/api/check', { headers: { 'Authorization': 'Bearer ' + TOKEN }, cache: 'no-store' });
+      const data = await res.json();
+      return !!data.ok;
+    } catch(e) { return false; }
+  }
+
+  async function init(){
+    applySiteCfg();
+    const ok = await checkAuth();
+    if (ok) {
+      document.getElementById('loginMask').style.display = 'none';
+      load();
+    }
+  }
+
+  async function applySiteCfg(){
+    try {
+      const r = await fetch('/api/site', { cache: 'no-store' });
+      const d = await r.json();
+      const cfg = d.config;
+      if (!cfg) return;
+      if (cfg.name) document.getElementById('siteName').textContent = cfg.name;
+      const badge = document.getElementById('logoBadge');
+      if (cfg.logo_url) {
+        badge.innerHTML = '<img src="' + cfg.logo_url + '" alt="logo" style="width:100%;height:100%;object-fit:cover">';
+      } else {
+        badge.innerHTML = '';
+        badge.textContent = (cfg.logo_text || cfg.name || 'cx').slice(0, 2);
+      }
+    } catch(e) {}
+  }
+
+  async function doLogin(){
+    const pwd = document.getElementById('loginPwd').value;
+    const errBox = document.getElementById('loginErr');
+    errBox.textContent = '';
+    if (!pwd) { errBox.textContent = '请输入密码'; return; }
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+      if (data.ok && data.token) {
+        TOKEN = data.token;
+        localStorage.setItem('cxkk_token', TOKEN);
+        document.getElementById('loginMask').style.display = 'none';
+        document.getElementById('loginPwd').value = '';
+        load();
+      } else {
+        errBox.textContent = '密码错误';
+      }
+    } catch(e) { errBox.textContent = '网络错误，请重试'; }
+  }
+
+  async function load(){
+    try {
+      const res = await fetch('/links.json', { cache:'no-store' });
+      const data = await res.json();
+      LINKS = Array.isArray(data) ? data : [];
+    } catch(e) {
+      LINKS = [];
+    }
+    render();
+  }
+
+  function render(){
+    const box = document.getElementById('list');
+    box.innerHTML = '';
+    if (!LINKS.length) {
+      box.innerHTML = '<div class="empty">暂无链接，点击右上角「新增链接」添加。</div>';
+      return;
+    }
+    LINKS.forEach((item, i) => {
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.draggable = true;
+      row.dataset.index = i;
+
+      const handle = document.createElement('span');
+      handle.className = 'drag-handle';
+      handle.textContent = '☰';
+      handle.title = '拖拽调整顺序';
+
+      const lb = document.createElement('div');
+      lb.className = 'i-label'; lb.textContent = item.label || '未命名';
+
+      const val = document.createElement('div');
+      val.className = 'i-value'; val.textContent = item.value || '';
+
+      const ops = document.createElement('div');
+      ops.className = 'i-ops';
+
+      const bEdit = document.createElement('button');
+      bEdit.className = 'btn-sm ghost'; bEdit.textContent = '编辑';
+      bEdit.onclick = () => editItem(i);
+
+      const bDel = document.createElement('button');
+      bDel.className = 'btn-sm danger'; bDel.textContent = '删除';
+      bDel.onclick = () => delItem(i);
+
+      const bCopy = document.createElement('button');
+      bCopy.className = 'btn-sm ghost'; bCopy.textContent = '复制';
+      bCopy.onclick = () => copyText(item.value, bCopy);
+
+      ops.appendChild(bEdit); ops.appendChild(bDel); ops.appendChild(bCopy);
+      row.appendChild(handle); row.appendChild(lb); row.appendChild(val); row.appendChild(ops);
+      box.appendChild(row);
+    });
+
+    bindDrag();
+  }
+
+  let dragSrcIdx = -1;
+
+  function bindDrag(){
+    const rows = document.querySelectorAll('#list .item');
+    rows.forEach(row => {
+      row.addEventListener('dragstart', e => {
+        dragSrcIdx = parseInt(row.dataset.index, 10);
+        row.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      row.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        rows.forEach(r => r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      });
+      row.addEventListener('dragleave', () => {
+        row.classList.remove('drag-over');
+      });
+      row.addEventListener('drop', async e => {
+        e.preventDefault();
+        row.classList.remove('drag-over');
+        const targetIdx = parseInt(row.dataset.index, 10);
+        if (dragSrcIdx < 0 || dragSrcIdx === targetIdx) return;
+        const moved = LINKS.splice(dragSrcIdx, 1)[0];
+        LINKS.splice(targetIdx, 0, moved);
+        render();
+        await save();
+      });
+      row.addEventListener('dragend', () => {
+        rows.forEach(r => { r.classList.remove('dragging'); r.classList.remove('drag-over'); });
+        dragSrcIdx = -1;
+      });
+    });
+  }
+
+  function copyText(txt, btn){
+    const done = () => { btn.textContent = '已复制 ✓'; setTimeout(() => { btn.textContent = '复制'; }, 1500); };
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = txt;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch(e){ }
+      document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(txt).then(done).catch(fallback);
+    } else { fallback(); }
+  }
+
+  function editItem(i){
+    editingIdx = i;
+    document.getElementById('formTitle').textContent = '编辑链接';
+    document.getElementById('fLabel').value = LINKS[i].label || '';
+    document.getElementById('fValue').value = LINKS[i].value || '';
+    showForm();
+  }
+
+  function addForm(){
+    editingIdx = -1;
+    document.getElementById('formTitle').textContent = '新增链接';
+    document.getElementById('fLabel').value = '';
+    document.getElementById('fValue').value = '';
+    showForm();
+  }
+
+  function showForm(){
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('fLabel').focus();
+    document.getElementById('formCard').scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  function closeForm(){
+    document.getElementById('formCard').style.display = 'none';
+    editingIdx = -1;
+  }
+
+  async function saveForm(){
+    const label = document.getElementById('fLabel').value.trim();
+    const value = document.getElementById('fValue').value.trim();
+    if (!value) { alert('请填写链接或命令内容'); return; }
+    if (editingIdx >= 0) {
+      LINKS[editingIdx] = { label: label || value, value };
+    } else {
+      LINKS.push({ label: label || value, value });
+    }
+    closeForm();
+    render();
+    await save();
+  }
+
+  async function delItem(i){
+    if (!confirm('确定删除「' + (LINKS[i].label || '') + '」吗？')) return;
+    LINKS.splice(i, 1);
+    render();
+    await save();
+  }
+
+  async function save(){
+    try {
+      const res = await fetch('/links.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+        body: JSON.stringify(LINKS)
+      });
+      if (res.status === 401) {
+        localStorage.removeItem('cxkk_token');
+        TOKEN = '';
+        document.getElementById('loginMask').style.display = 'flex';
+        document.getElementById('loginErr').textContent = '登录已过期，请重新登录';
+      }
+    } catch(e) { alert('保存失败，请重试'); }
+  }
+
+  document.getElementById('btnAdd').addEventListener('click', addForm);
+  document.getElementById('loginPwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  init();
+</script>
+</body>
+</html>

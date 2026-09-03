@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>关于 · cxkk 技术小站</title>
+<meta name="description" content="关于本站">
+<style>
+  :root{
+    --bg:#eef4fb;--card:#fff;--primary:#2f6fed;--primary-soft:#e4edfd;
+    --text:#1f2d3d;--text-2:#5a6b7f;--text-3:#8a9ab0;--border:#e3ebf6;
+    --radius:12px;--shadow:0 2px 10px rgba(47,111,237,.06);--danger:#e5484d;--danger-soft:#fdecec;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav-inner{max-width:1180px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:28px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--primary)}
+  .logo-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2f6fed,#5aa0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;overflow:hidden}
+  .logo-badge img{width:100%;height:100%;object-fit:cover}
+  .nav-menu{display:flex;gap:22px;font-size:15px;color:var(--text-2)}
+  .nav-menu a:hover{color:var(--primary)}
+  .nav-menu a.active{color:var(--primary);font-weight:600}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .nav-link{font-size:14.5px;color:var(--text-2);cursor:pointer;background:#fff;padding:7px 16px;border:1px solid var(--border);border-radius:8px;transition:.15s}
+  .nav-link:hover,.nav-link.active{color:var(--primary);border-color:var(--primary)}
+  .nav-btn{background:var(--primary);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:14px;cursor:pointer}
+  .nav-btn:hover{opacity:.9}
+  .wrap{max-width:900px;margin:0 auto;padding:30px 20px 40px}
+  .about-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px 30px;text-align:center}
+  .about-logo{width:84px;height:84px;border-radius:22px;margin:0 auto 16px;background:linear-gradient(135deg,#2f6fed,#5aa0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:40px;font-weight:800;overflow:hidden;box-shadow:0 8px 22px rgba(47,111,237,.25)}
+  .about-logo img{width:100%;height:100%;object-fit:cover}
+  .about-name{font-size:28px;font-weight:800;margin-bottom:8px}
+  .about-slogan{font-size:15px;color:var(--primary);margin-bottom:16px}
+  .about-intro{font-size:14px;color:var(--text-2);max-width:620px;margin:0 auto 26px}
+  .stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;padding-top:20px;border-top:1px dashed var(--border)}
+  .stat .n{font-size:24px;font-weight:800;color:var(--primary)}
+  .stat .l{font-size:12.5px;color:var(--text-3);margin-top:2px}
+
+  .panel{margin-top:26px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+  .panel h3{font-size:16px;margin-bottom:14px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+  .field input,.field textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;background:#fbfcfe;color:var(--text)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--primary);background:#fff}
+  .btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:10px 22px;font-size:14px;cursor:pointer;font-weight:600}
+  .btn:hover{opacity:.9}
+  .hint{font-size:12px;color:var(--text-3);margin-top:8px}
+
+  .login-mask{position:fixed;inset:0;background:rgba(15,30,55,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+  .login-box{background:#fff;border-radius:14px;width:min(380px,100%);padding:28px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+  .login-box h2{font-size:18px;margin-bottom:6px}
+  .login-box .sub{font-size:12.5px;color:var(--text-3);margin-bottom:18px}
+  .login-box input{width:100%;border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;background:#fbfcfe;color:var(--text);margin-bottom:12px}
+  .login-box input:focus{outline:none;border-color:var(--primary);background:#fff}
+  .login-err{color:var(--danger);font-size:12.5px;margin-bottom:10px;min-height:18px}
+  .login-btn{width:100%;border:none;border-radius:8px;padding:11px;font-size:14.5px;background:var(--primary);color:#fff;cursor:pointer;font-weight:600}
+  .login-btn:hover{opacity:.9}
+  footer{border-top:1px solid var(--border);background:var(--card);padding:26px 20px;text-align:center;color:var(--text-3);font-size:13px}
+  footer .brand{color:var(--text-2);font-weight:600}
+  @media (max-width:900px){.nav-menu{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-badge" id="logoBadge">cx</span>
+      <span id="siteName">cxkk</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="/">首页</a>
+      <a href="/articles.html">全部文章</a>
+      <a href="/apps.html">软件</a>
+      <a href="/tutorials.html">教程</a>
+      <a href="/about.html" class="active">关于</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-link" href="/links.html">链接</a>
+      <a class="nav-btn" href="javascript:void(0)" onclick="showLogin()">登录</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="about-card">
+    <div class="about-logo" id="aboutLogo">cx</div>
+    <div class="about-name" id="aboutName">cxkk</div>
+    <div class="about-slogan" id="aboutSlogan">保持热爱，折腾不止</div>
+    <div class="about-intro" id="aboutIntro">本站为个人技术分享站。</div>
+    <div class="stats">
+      <div class="stat"><div class="n" id="statArt">0</div><div class="l">文章</div></div>
+      <div class="stat"><div class="n" id="statApp">0</div><div class="l">软件</div></div>
+      <div class="stat"><div class="n" id="statLink">0</div><div class="l">常用链接</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="setPanel" style="display:none">
+    <h3>站点设置（保存后全站生效）</h3>
+    <div class="field"><label>站点名称</label><input id="sName" maxlength="60"></div>
+    <div class="field"><label>Logo 文字（无图片时显示，如 cx）</label><input id="sLogoText" maxlength="20"></div>
+    <div class="field"><label>Logo 图片链接（留空则显示上方文字色块）</label><input id="sLogoUrl" maxlength="500" placeholder="https://...png"></div>
+    <div class="field"><label>站点标语 Slogan</label><input id="sSlogan" maxlength="100"></div>
+    <div class="field"><label>站点简介</label><textarea id="sIntro" rows="3" maxlength="300"></textarea></div>
+    <div class="field"><label>页脚文字</label><input id="sFooter" maxlength="300"></div>
+
+    <h3 style="margin-top:24px">轮播图设置（首页顶部，最多 6 张）</h3>
+    <div id="carouselEditor"></div>
+    <button class="btn" style="margin-top:8px;background:#5a6b7f" onclick="addSlide()">+ 添加一张轮播</button>
+
+    <div style="margin-top:20px">
+      <button class="btn" onclick="saveConfig()">保存设置</button>
+    </div>
+    <div class="hint">提示：保存后首页及各页面左上角 Logo、名称、页脚、轮播图会立即更新。</div>
+  </div>
+</div>
+
+<footer>
+  <p id="footerText">© 2023-2026 By cxkk · 保持热爱，折腾不止</p>
+</footer>
+
+<div class="login-mask" id="loginMask" style="display:none">
+  <div class="login-box">
+    <h2>管理登录</h2>
+    <div class="sub">输入管理密码后可编辑站点设置</div>
+    <input type="password" id="loginPwd" placeholder="请输入管理密码" autocomplete="current-password">
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="btnLogin" onclick="doLogin()">登 录</button>
+  </div>
+</div>
+
+<script>
+  let CONFIG = {};
+  let ARTICLES = [], APPS = [], LINKS = [];
+  let TOKEN = localStorage.getItem('cxkk_token') || '';
+
+  function applyConfig(cfg){
+    if (!cfg) return;
+    CONFIG = cfg;
+    if (cfg.name) {
+      document.getElementById('siteName').textContent = cfg.name;
+      document.getElementById('aboutName').textContent = cfg.name;
+      document.title = document.title.replace('cxkk', cfg.name);
+    }
+    if (cfg.slogan) document.getElementById('aboutSlogan').textContent = cfg.slogan;
+    if (cfg.intro) document.getElementById('aboutIntro').textContent = cfg.intro;
+    if (cfg.footer_text) document.getElementById('footerText').textContent = cfg.footer_text;
+    const logoUrl = cfg.logo_url;
+    const logoText = (cfg.logo_text || cfg.name || 'cx').slice(0, 2);
+    const badge = document.getElementById('logoBadge');
+    const aboutLogo = document.getElementById('aboutLogo');
+    if (logoUrl) {
+      const html = '<img src="' + logoUrl + '" alt="logo">';
+      badge.innerHTML = html; aboutLogo.innerHTML = html;
+    } else {
+      badge.innerHTML = ''; badge.textContent = logoText;
+      aboutLogo.innerHTML = ''; aboutLogo.textContent = logoText;
+    }
+  }
+
+  async function checkAuth(){
+    if (!TOKEN) return false;
+    try {
+      const r = await fetch('/api/check', { headers: { 'Authorization': 'Bearer ' + TOKEN }, cache: 'no-store' });
+      const d = await r.json();
+      return !!d.ok;
+    } catch(e) { return false; }
+  }
+
+  function showLogin(){
+    const mask = document.getElementById('loginMask');
+    mask.style.display = 'flex';
+    document.getElementById('loginPwd').focus();
+    mask.onclick = e => { if (e.target === mask) mask.style.display = 'none'; };
+  }
+
+  async function doLogin(){
+    const pwd = document.getElementById('loginPwd').value;
+    const err = document.getElementById('loginErr');
+    err.textContent = '';
+    if (!pwd) { err.textContent = '请输入密码'; return; }
+    try {
+      const r = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pwd }) });
+      const d = await r.json();
+      if (d.ok && d.token) {
+        TOKEN = d.token;
+        localStorage.setItem('cxkk_token', TOKEN);
+        document.getElementById('loginMask').style.display = 'none';
+        document.getElementById('loginPwd').value = '';
+        showSettings();
+      } else { err.textContent = '密码错误'; }
+    } catch(e) { err.textContent = '网络错误，请重试'; }
+  }
+
+  function showSettings(){
+    document.getElementById('setPanel').style.display = 'block';
+    document.getElementById('sName').value = CONFIG.name || '';
+    document.getElementById('sLogoText').value = CONFIG.logo_text || '';
+    document.getElementById('sLogoUrl').value = CONFIG.logo_url || '';
+    document.getElementById('sSlogan').value = CONFIG.slogan || '';
+    document.getElementById('sIntro').value = CONFIG.intro || '';
+    document.getElementById('sFooter').value = CONFIG.footer_text || '';
+    renderCarouselEditor(CONFIG.carousel || []);
+  }
+
+  function renderCarouselEditor(list){
+    const box = document.getElementById('carouselEditor');
+    box.innerHTML = '';
+    (list.length ? list : [{img:'',title:'',desc:'',url:''}]).forEach((s, i) => addSlide(s, i));
+  }
+
+  function addSlide(data, idx){
+    const box = document.getElementById('carouselEditor');
+    const row = document.createElement('div');
+    row.className = 'field';
+    row.style.border = '1px solid var(--border)';
+    row.style.borderRadius = '8px';
+    row.style.padding = '12px';
+    row.style.marginBottom = '10px';
+    row.style.background = '#fbfcfe';
+    const d = data || {img:'',title:'',desc:'',url:''};
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-size:13px">轮播 ${(typeof idx==='number'?idx:box.children.length)+1}</strong>
+        <button type="button" style="background:var(--danger-soft);color:var(--danger);border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer" onclick="this.closest('.field').remove()">删除</button>
+      </div>
+      <label style="font-size:12px;color:var(--text-3)">图片链接（留空用默认渐变背景）</label>
+      <div style="display:flex;gap:6px">
+        <input class="c-img" value="${(d.img||'').replace(/"/g,'&quot;')}" placeholder="https://...jpg" style="flex:1">
+        <button type="button" class="btn-up" onclick="uploadCarouselImg(this)" style="background:var(--primary-soft);color:var(--primary);border:none;border-radius:6px;padding:0 12px;font-size:12px;cursor:pointer;white-space:nowrap">上传</button>
+      </div>
+      <label style="font-size:12px;color:var(--text-3);margin-top:6px;display:block">标题</label>
+      <input class="c-title" value="${(d.title||'').replace(/"/g,'&quot;')}">
+      <label style="font-size:12px;color:var(--text-3);margin-top:6px;display:block">描述</label>
+      <input class="c-desc" value="${(d.desc||'').replace(/"/g,'&quot;')}">
+      <label style="font-size:12px;color:var(--text-3);margin-top:6px;display:block">点击跳转链接（留空不跳转）</label>
+      <input class="c-url" value="${(d.url||'').replace(/"/g,'&quot;')}">
+    `;
+    box.appendChild(row);
+  }
+
+  function collectCarousel(){
+    const rows = document.querySelectorAll('#carouselEditor .field');
+    const arr = [];
+    rows.forEach(r => {
+      const img = r.querySelector('.c-img').value.trim();
+      const title = r.querySelector('.c-title').value.trim();
+      const desc = r.querySelector('.c-desc').value.trim();
+      const url = r.querySelector('.c-url').value.trim();
+      if (title || img) arr.push({img, title, desc, url});
+    });
+    return arr.slice(0, 6);
+  }
+
+  let currentImgInput = null;
+  function uploadCarouselImg(btn){
+    currentImgInput = btn.closest('.field').querySelector('.c-img');
+    document.getElementById('carouselFileInput').click();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const fi = document.getElementById('carouselFileInput');
+    fi.addEventListener('change', async () => {
+      const file = fi.files[0];
+      if (!file || !currentImgInput) return;
+      if (file.size > 25 * 1024 * 1024) { alert('图片不能超过 25MB'); return; }
+      const origText = currentImgInput.value;
+      currentImgInput.value = '上传中...';
+      try {
+        const token = localStorage.getItem('cxkk_token') || '';
+        const r = await fetch('/api/upload?name=' + encodeURIComponent(file.name), {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token, 'X-File-Type': file.type || 'application/octet-stream' },
+          body: file
+        });
+        if (r.status === 401) { alert('登录已过期，请重新登录'); currentImgInput.value = origText; return; }
+        const d = await r.json();
+        if (d.ok && d.url) {
+          currentImgInput.value = d.url;
+        } else {
+          alert('上传失败：' + (d.error || '未知错误'));
+          currentImgInput.value = origText;
+        }
+      } catch(e) {
+        alert('上传失败：' + e.message);
+        currentImgInput.value = origText;
+      } finally {
+        fi.value = '';
+      }
+    });
+  });
+
+  async function saveConfig(){
+    const body = {
+      name: document.getElementById('sName').value.trim(),
+      logo_text: document.getElementById('sLogoText').value.trim(),
+      logo_url: document.getElementById('sLogoUrl').value.trim(),
+      slogan: document.getElementById('sSlogan').value.trim(),
+      intro: document.getElementById('sIntro').value.trim(),
+      footer_text: document.getElementById('sFooter').value.trim(),
+      carousel: collectCarousel()
+    };
+    try {
+      const r = await fetch('/api/config', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+        body: JSON.stringify(body)
+      });
+      if (r.status === 401) {
+        localStorage.removeItem('cxkk_token'); TOKEN = '';
+        showLogin(); document.getElementById('loginErr').textContent = '登录已过期，请重新登录';
+        return;
+      }
+      const d = await r.json();
+      if (d.ok) {
+        applyConfig(d.config);
+        alert('设置已保存，全站生效');
+      } else { alert('保存失败'); }
+    } catch(e) { alert('保存失败，请重试'); }
+  }
+
+  async function init(){
+    try {
+      const r = await fetch('/api/site', { cache: 'no-store' });
+      const d = await r.json();
+      if (d.config) applyConfig(d.config);
+      ARTICLES = Array.isArray(d.articles) ? d.articles : [];
+      document.getElementById('statArt').textContent = ARTICLES.length;
+    } catch(e) {}
+    try { const a = await (await fetch('/apps.json', {cache:'no-store'})).json(); APPS = Array.isArray(a)?a:[]; } catch(e){}
+    document.getElementById('statApp').textContent = APPS.length;
+    try { const l = await (await fetch('/links.json', {cache:'no-store'})).json(); LINKS = Array.isArray(l)?l:[]; } catch(e){}
+    document.getElementById('statLink').textContent = LINKS.length;
+
+    const ok = await checkAuth();
+    if (ok) showSettings();
+    else if (location.hash === '#login') showLogin();
+  }
+  init();
+</script>
+<!-- 隐藏的文件选择器 -->
+<input type="file" id="carouselFileInput" style="display:none" accept="image/*">
+
+</body>
+</html>

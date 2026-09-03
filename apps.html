@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>推荐应用 · cxkk 技术小站</title>
+<meta name="description" content="cxkk 常用软件与应用下载">
+<style>
+  :root{
+    --bg:#eef4fb;
+    --card:#ffffff;
+    --primary:#2f6fed;
+    --primary-soft:#e4edfd;
+    --text:#1f2d3d;
+    --text-2:#5a6b7f;
+    --text-3:#8a9ab0;
+    --border:#e3ebf6;
+    --radius:12px;
+    --shadow:0 2px 10px rgba(47,111,237,.06);
+    --danger:#e5484d;
+    --danger-soft:#fdecec;
+    --tag:#ff7a45;
+    --tag-bg:#fff2e8;
+    --dark:#22262e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* 顶部导航 */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:0 20px;
+    height:60px;display:flex;align-items:center;gap:28px;
+  }
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--primary)}
+  .logo-badge{
+    width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2f6fed,#5aa0ff);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;
+  }
+  .nav-menu{display:flex;gap:22px;font-size:15px;color:var(--text-2)}
+  .nav-menu a:hover{color:var(--primary)}
+  .nav-menu a.active{color:var(--primary);font-weight:600}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .nav-link{
+    font-size:14.5px;color:var(--text-2);cursor:pointer;background:#fff;
+    padding:7px 16px;border:1px solid var(--border);border-radius:8px;transition:.15s;
+  }
+  .nav-link:hover,.nav-link.active{color:var(--primary);border-color:var(--primary)}
+  .nav-btn{background:var(--primary);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:14px;cursor:pointer}
+  .nav-btn:hover{opacity:.9}
+
+  /* 主体 */
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 40px}
+  .page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+  .page-head h1{font-size:24px}
+  .btn-add{
+    background:var(--primary);color:#fff;border:none;border-radius:9px;
+    padding:9px 20px;font-size:14.5px;cursor:pointer;font-weight:600;
+  }
+  .btn-add:hover{opacity:.9}
+  .tip{font-size:12.5px;color:var(--text-3);margin-bottom:20px}
+
+  /* 软件网格 */
+  .grid{
+    display:grid;grid-template-columns:repeat(5,1fr);
+    gap:18px;
+  }
+  .app{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px 16px 14px;text-align:center;
+    position:relative;display:flex;flex-direction:column;align-items:center;transition:.18s;
+  }
+  .app:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(47,111,237,.12)}
+  .app-tag{
+    position:absolute;top:12px;left:12px;font-size:11px;color:#fff;
+    background:var(--tag);padding:2px 8px;border-radius:6px;font-weight:600;
+  }
+  .app-tag.top{background:#f5222d}
+  .app-tag.green{background:#52c41a}
+  .app-icon{
+    width:64px;height:64px;border-radius:16px;overflow:hidden;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 10px rgba(47,111,237,.16);
+  }
+  .app-icon img{width:100%;height:100%;object-fit:cover;display:block}
+  .app-icon .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:700}
+  .app-name{font-size:15px;font-weight:600;margin-bottom:4px;word-break:break-all;line-height:1.3}
+  .app-dl{font-size:12px;color:var(--text-3);margin-bottom:12px}
+  .app-btn{
+    width:100%;border:none;border-radius:8px;padding:8px;font-size:13.5px;cursor:pointer;
+    background:var(--dark);color:#fff;font-weight:600;transition:.15s;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .app-btn:hover{opacity:.88}
+  .app-btn.primary{background:var(--primary)}
+  .app-ops{display:flex;gap:8px;margin-top:10px;width:100%}
+  .btn-sm{
+    border:none;border-radius:7px;padding:5px 0;font-size:12.5px;cursor:pointer;flex:1;
+    background:var(--primary-soft);color:var(--primary);
+  }
+  .btn-sm.danger{background:var(--danger-soft);color:var(--danger)}
+  .btn-sm:hover{opacity:.85}
+
+  .empty{grid-column:1/-1;text-align:center;color:var(--text-3);padding:60px 0}
+
+  /* 新增/编辑表单 */
+  .form-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px;margin-top:22px;
+  }
+  .form-card h3{font-size:16px;margin-bottom:14px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-grid input{
+    border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;font-size:14px;background:#fbfcfe;color:var(--text);
+  }
+  .form-grid input.full{grid-column:1/-1}
+  .form-grid input:focus{outline:none;border-color:var(--primary);background:#fff}
+  .form-ops{display:flex;gap:10px;margin-top:14px}
+
+  /* 文件上传 */
+  .upload-row{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-top:14px;padding:12px 14px;background:#f4f8ff;
+    border:1px dashed var(--primary);border-radius:10px;
+  }
+  .upload-row .lbl{font-size:13.5px;color:var(--text-2);font-weight:600}
+  .upload-row input[type=file]{
+    flex:1;min-width:200px;font-size:13px;color:var(--text-2);
+  }
+  .up-btn{
+    border:none;border-radius:8px;padding:8px 18px;font-size:13.5px;cursor:pointer;
+    background:var(--primary);color:#fff;font-weight:600;
+  }
+  .up-btn:hover{opacity:.9}
+  .up-btn:disabled{opacity:.5;cursor:not-allowed}
+  .up-info{width:100%;font-size:12.5px;color:var(--text-3);min-height:18px}
+  .up-info.ok{color:#2ea44f}
+  .up-info.err{color:var(--danger)}
+
+  /* 登录遮罩 */
+  .login-mask{
+    position:fixed;inset:0;background:rgba(15,30,55,.55);z-index:300;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .login-box{
+    background:#fff;border-radius:14px;width:min(380px,100%);
+    padding:28px 26px;box-shadow:0 20px 50px rgba(0,0,0,.25);
+  }
+  .login-box h2{font-size:18px;margin-bottom:6px}
+  .login-box .sub{font-size:12.5px;color:var(--text-3);margin-bottom:18px}
+  .login-box input{
+    width:100%;border:1px solid var(--border);border-radius:8px;
+    padding:11px 14px;font-size:14px;background:#fbfcfe;color:var(--text);margin-bottom:12px;
+  }
+  .login-box input:focus{outline:none;border-color:var(--primary);background:#fff}
+  .login-err{color:var(--danger);font-size:12.5px;margin-bottom:10px;min-height:18px}
+  .login-btn{
+    width:100%;border:none;border-radius:8px;padding:11px;font-size:14.5px;
+    background:var(--primary);color:#fff;cursor:pointer;font-weight:600;
+  }
+  .login-btn:hover{opacity:.9}
+
+  footer{border-top:1px solid var(--border);background:var(--card);padding:26px 20px;text-align:center;color:var(--text-3);font-size:13px}
+  footer .brand{color:var(--text-2);font-weight:600}
+
+  @media (max-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
+  @media (max-width:860px){.grid{grid-template-columns:repeat(3,1fr)} .form-grid{grid-template-columns:1fr}}
+  @media (max-width:560px){.grid{grid-template-columns:repeat(2,1fr)} .nav-menu{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-badge" id="logoBadge">cx</span>
+      <span id="siteName">cxkk</span>
+    </a>
+    <nav class="nav-menu">
+      <a href="/">首页</a>
+      <a href="#">全部文章</a>
+      <a href="/apps.html" class="active">软件</a>
+      <a href="#">教程</a>
+      <a href="#">关于</a>
+    </nav>
+    <div class="nav-right">
+      <a class="nav-link" href="/links.html">链接</a>
+      <a class="nav-btn" href="javascript:void(0)" onclick="showLogin()">登录</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>推荐应用</h1>
+    <button class="btn-add" id="btnAdd" style="display:none">＋ 添加软件</button>
+  </div>
+  <div class="tip">点击「下载」获取软件；登录后可添加、编辑、删除软件。</div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="form-card" id="formCard" style="display:none">
+    <h3 id="formTitle">添加软件</h3>
+    <div class="form-grid">
+      <input id="fName" placeholder="软件名称（如 微信）" maxlength="60">
+      <input id="fIcon" placeholder="图标链接（可选，留空自动生成）" maxlength="500">
+      <input id="fUrl" placeholder="下载链接（必填）" maxlength="500">
+      <input id="fDownloads" placeholder="下载量，如 135.41万（可选）" maxlength="30">
+      <input id="fTag" placeholder="标签（可选，如 无广告 / TOP）" maxlength="20" class="full">
+      <input id="fDesc" placeholder="简介（可选）" maxlength="200" class="full">
+    </div>
+    <div class="upload-row">
+      <span class="lbl">上传文件</span>
+      <input type="file" id="fFile">
+      <button class="up-btn" id="btnUp" onclick="uploadFile()">上传到本站</button>
+      <div class="up-info" id="upInfo">选好文件后点「上传到本站」，上传成功会自动填入下载链接（单个文件 ≤25MB）。</div>
+    </div>
+    <div class="form-ops">
+      <button class="btn-sm" style="background:var(--primary);color:#fff" id="btnSave" onclick="saveForm()">保存</button>
+      <button class="btn-sm ghost" onclick="closeForm()">取消</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><span class="brand">© 2023-2026 By cxkk</span> &nbsp;·&nbsp; 保持热爱，折腾不止</p>
+</footer>
+
+<!-- 登录遮罩（默认隐藏，点击右上角「登录」弹出） -->
+<div class="login-mask" id="loginMask" style="display:none">
+  <div class="login-box">
+    <h2>管理登录</h2>
+    <div class="sub">输入管理密码后可添加、编辑、删除软件</div>
+    <input type="password" id="loginPwd" placeholder="请输入管理密码" autocomplete="current-password">
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="btnLogin" onclick="doLogin()">登 录</button>
+  </div>
+</div>
+
+<script>
+  let APPS = [];
+  let editingIdx = -1;
+  let TOKEN = localStorage.getItem('cxkk_token') || '';
+  let AUTHED = false;
+
+  async function checkAuth(){
+    if (!TOKEN) return false;
+    try {
+      const res = await fetch('/api/check', { headers: { 'Authorization': 'Bearer ' + TOKEN }, cache: 'no-store' });
+      const data = await res.json();
+      return !!data.ok;
+    } catch(e) { return false; }
+  }
+
+  async function init(){
+    // 先加载数据（软件公开可见可下载）
+    load();
+    applySiteCfg();
+    const ok = await checkAuth();
+    if (ok) {
+      AUTHED = true;
+      document.getElementById('btnAdd').style.display = 'inline-block';
+      render();
+    }
+  }
+
+  async function applySiteCfg(){
+    try {
+      const r = await fetch('/api/site', { cache: 'no-store' });
+      const d = await r.json();
+      const cfg = d.config;
+      if (!cfg) return;
+      if (cfg.name) document.getElementById('siteName').textContent = cfg.name;
+      const badge = document.getElementById('logoBadge');
+      if (cfg.logo_url) {
+        badge.innerHTML = '<img src="' + cfg.logo_url + '" alt="logo" style="width:100%;height:100%;object-fit:cover">';
+      } else {
+        badge.innerHTML = '';
+        badge.textContent = (cfg.logo_text || cfg.name || 'cx').slice(0, 2);
+      }
+    } catch(e) {}
+  }
+
+  function showLogin(){
+    const mask = document.getElementById('loginMask');
+    mask.style.display = 'flex';
+    document.getElementById('loginPwd').focus();
+    // 点击遮罩空白处关闭
+    mask.onclick = e => { if (e.target === mask) mask.style.display = 'none'; };
+  }
+
+  async function doLogin(){
+    const pwd = document.getElementById('loginPwd').value;
+    const errBox = document.getElementById('loginErr');
+    errBox.textContent = '';
+    if (!pwd) { errBox.textContent = '请输入密码'; return; }
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      const data = await res.json();
+      if (data.ok && data.token) {
+        TOKEN = data.token;
+        localStorage.setItem('cxkk_token', TOKEN);
+        AUTHED = true;
+        document.getElementById('loginMask').style.display = 'none';
+        document.getElementById('loginPwd').value = '';
+        document.getElementById('btnAdd').style.display = 'inline-block';
+        render();
+      } else {
+        errBox.textContent = '密码错误';
+      }
+    } catch(e) { errBox.textContent = '网络错误，请重试'; }
+  }
+
+  async function load(){
+    try {
+      const res = await fetch('/apps.json', { cache:'no-store' });
+      const data = await res.json();
+      APPS = Array.isArray(data) ? data : [];
+    } catch(e) {
+      APPS = [];
+    }
+    render();
+  }
+
+  const PH_COLORS = ['#2f6fed','#7c4dff','#00b578','#ff7a45','#f5222d','#13c2c2','#eb2f96','#fa8c16'];
+
+  function render(){
+    const box = document.getElementById('grid');
+    box.innerHTML = '';
+    if (!APPS.length) {
+      box.innerHTML = '<div class="empty">暂无软件，登录后点击「添加软件」发布。</div>';
+      return;
+    }
+    APPS.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'app';
+
+      if (item.tag) {
+        const tag = document.createElement('span');
+        tag.className = 'app-tag' + (item.tag.indexOf('TOP') >= 0 ? ' top' : '');
+        tag.textContent = item.tag;
+        card.appendChild(tag);
+      }
+
+      const icon = document.createElement('div');
+      icon.className = 'app-icon';
+      if (item.icon) {
+        const img = document.createElement('img');
+        img.src = item.icon;
+        img.loading = 'lazy';
+        img.alt = item.name;
+        img.onerror = () => { img.replaceWith(makePh(item.name)); };
+        icon.appendChild(img);
+      } else {
+        icon.appendChild(makePh(item.name));
+      }
+      card.appendChild(icon);
+
+      const name = document.createElement('div');
+      name.className = 'app-name'; name.textContent = item.name || '未命名';
+      card.appendChild(name);
+
+      const dl = document.createElement('div');
+      dl.className = 'app-dl';
+      dl.textContent = (item.downloads ? item.downloads : '0') + ' 次下载';
+      card.appendChild(dl);
+
+      if (item.desc) {
+        const dsc = document.createElement('div');
+        dsc.className = 'app-dl'; dsc.style.color = 'var(--text-3)'; dsc.style.marginTop = '-6px'; dsc.style.marginBottom = '10px';
+        dsc.textContent = item.desc;
+        card.appendChild(dsc);
+      }
+
+      const btn = document.createElement('a');
+      btn.className = 'app-btn' + (item.url ? '' : ' primary');
+      btn.href = item.url || '#';
+      btn.target = '_blank'; btn.rel = 'noopener';
+      btn.innerHTML = item.url ? '⬇ 下载' : '暂无下载';
+      card.appendChild(btn);
+
+      if (AUTHED) {
+        const ops = document.createElement('div');
+        ops.className = 'app-ops';
+        const bE = document.createElement('button');
+        bE.className = 'btn-sm'; bE.textContent = '编辑';
+        bE.onclick = () => editItem(i);
+        const bD = document.createElement('button');
+        bD.className = 'btn-sm danger'; bD.textContent = '删除';
+        bD.onclick = () => delItem(i);
+        ops.appendChild(bE); ops.appendChild(bD);
+        card.appendChild(ops);
+      }
+
+      box.appendChild(card);
+    });
+  }
+
+  function makePh(name){
+    const ph = document.createElement('div');
+    ph.className = 'ph';
+    const c = PH_COLORS[(name || '').charCodeAt(0) % PH_COLORS.length] || PH_COLORS[0];
+    ph.style.background = c;
+    ph.textContent = (name || '?').slice(0, 1).toUpperCase();
+    return ph;
+  }
+
+  function editItem(i){
+    editingIdx = i;
+    document.getElementById('formTitle').textContent = '编辑软件';
+    document.getElementById('fName').value = APPS[i].name || '';
+    document.getElementById('fIcon').value = APPS[i].icon || '';
+    document.getElementById('fUrl').value = APPS[i].url || '';
+    document.getElementById('fDownloads').value = APPS[i].downloads || '';
+    document.getElementById('fTag').value = APPS[i].tag || '';
+    document.getElementById('fDesc').value = APPS[i].desc || '';
+    showForm();
+  }
+
+  function addForm(){
+    editingIdx = -1;
+    document.getElementById('formTitle').textContent = '添加软件';
+    ['fName','fIcon','fUrl','fDownloads','fTag','fDesc'].forEach(id => document.getElementById(id).value = '');
+    showForm();
+  }
+
+  function showForm(){
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('fName').focus();
+    document.getElementById('formCard').scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  function closeForm(){
+    document.getElementById('formCard').style.display = 'none';
+    editingIdx = -1;
+  }
+
+  async function uploadFile(){
+    const input = document.getElementById('fFile');
+    const info = document.getElementById('upInfo');
+    const btn = document.getElementById('btnUp');
+    const file = input.files && input.files[0];
+    if (!file) { info.className = 'up-info err'; info.textContent = '请先选择文件'; return; }
+    if (file.size > 25 * 1024 * 1024) { info.className = 'up-info err'; info.textContent = '文件超过 25MB 限制，无法上传'; return; }
+    info.className = 'up-info'; info.textContent = '正在上传 ' + file.name + ' ...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/upload?name=' + encodeURIComponent(file.name), {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + TOKEN, 'X-File-Type': file.type || 'application/octet-stream' },
+        body: file
+      });
+      const data = await res.json();
+      if (data.ok && data.url) {
+        document.getElementById('fUrl').value = data.url;
+        info.className = 'up-info ok';
+        info.textContent = '上传成功！已填入下载链接（' + Math.round(data.size / 1024) + ' KB）';
+      } else {
+        info.className = 'up-info err';
+        info.textContent = data.error || '上传失败，请重试';
+      }
+    } catch(e) {
+      info.className = 'up-info err';
+      info.textContent = '上传出错，请重试';
+    }
+    btn.disabled = false;
+  }
+
+  async function saveForm(){
+    const name = document.getElementById('fName').value.trim();
+    const url = document.getElementById('fUrl').value.trim();
+    if (!name) { alert('请填写软件名称'); return; }
+    if (!url) { alert('请填写下载链接'); return; }
+    const obj = {
+      name,
+      icon: document.getElementById('fIcon').value.trim(),
+      url,
+      downloads: document.getElementById('fDownloads').value.trim(),
+      tag: document.getElementById('fTag').value.trim(),
+      desc: document.getElementById('fDesc').value.trim()
+    };
+    if (editingIdx >= 0) {
+      APPS[editingIdx] = obj;
+    } else {
+      APPS.push(obj);
+    }
+    closeForm();
+    render();
+    await save();
+  }
+
+  async function delItem(i){
+    if (!confirm('确定删除「' + (APPS[i].name || '') + '」吗？')) return;
+    APPS.splice(i, 1);
+    render();
+    await save();
+  }
+
+  async function save(){
+    try {
+      const res = await fetch('/apps.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN },
+        body: JSON.stringify(APPS)
+      });
+      if (res.status === 401) {
+        localStorage.removeItem('cxkk_token');
+        TOKEN = ''; AUTHED = false;
+        document.getElementById('btnAdd').style.display = 'none';
+        document.getElementById('loginMask').style.display = 'flex';
+        document.getElementById('loginErr').textContent = '登录已过期，请重新登录';
+        render();
+      }
+    } catch(e) { alert('保存失败，请重试'); }
+  }
+
+  document.getElementById('btnAdd').addEventListener('click', addForm);
+  document.getElementById('loginPwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  init();
+</script>
+</body>
+</html>

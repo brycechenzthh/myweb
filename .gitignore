@@ -1,0 +1,20 @@
+# 依赖与缓存
+node_modules/
+.wrangler/
+*.log
+.mf/
+
+# 临时截图/调试文件
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.zip
+!kv_add.png
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# 本地凭据
+.wrangler/
