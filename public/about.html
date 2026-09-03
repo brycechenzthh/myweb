@@ -69,16 +69,9 @@
       <span class="logo-badge" id="logoBadge">cx</span>
       <span id="siteName">cxkk</span>
     </a>
-    <nav class="nav-menu">
-      <a href="/">首页</a>
-      <a href="/articles.html">全部文章</a>
-      <a href="/apps.html">软件</a>
-      <a href="/tutorials.html">教程</a>
-      <a href="/about.html" class="active">关于</a>
-    </nav>
+    <nav class="nav-menu" id="navMenu"></nav>
     <div class="nav-right">
-      <a class="nav-link" href="/links.html">链接</a>
-      <a class="nav-btn" href="javascript:void(0)" onclick="showLogin()">登录</a>
+<a class="nav-btn" href="javascript:void(0)" onclick="showLogin()">登录</a>
     </div>
   </div>
 </header>
@@ -108,6 +101,19 @@
     <h3 style="margin-top:24px">轮播图设置（首页顶部，最多 6 张）</h3>
     <div id="carouselEditor"></div>
     <button class="btn" style="margin-top:8px;background:#5a6b7f" onclick="addSlide()">+ 添加一张轮播</button>
+
+    <h3 style="margin-top:24px">导航栏按钮设置（全站顶部菜单）</h3>
+    <div class="hint" style="font-size:12px;color:var(--text-3);margin-bottom:10px">可增删改导航按钮的名称与跳转地址，勾选「外链」则新窗口打开。删除全部将使用默认导航。</div>
+    <div id="navEditor"></div>
+    <button class="btn" style="margin-top:8px;background:#5a6b7f" onclick="addNavRow()">+ 添加一个导航按钮</button>
+
+    <h3 style="margin-top:24px">网盘设置（网盘页内容）</h3>
+    <div class="field"><label>网盘名称</label><input id="dName" maxlength="60" placeholder="如：资源网盘"></div>
+    <div class="field"><label>网盘简介</label><textarea id="dDesc" rows="2" maxlength="300"></textarea></div>
+    <div class="field"><label>网盘外链地址（可留空；填写后网盘页显示「打开网盘」按钮并跳转该链接）</label><input id="dUrl" maxlength="500" placeholder="https://..."></div>
+    <div class="hint" style="font-size:12px;color:var(--text-3);margin:4px 0 10px">网盘分类卡片（展示在网盘页）</div>
+    <div id="driveEditor"></div>
+    <button class="btn" style="margin-top:8px;background:#5a6b7f" onclick="addDriveRow()">+ 添加一个分类</button>
 
     <div style="margin-top:20px">
       <button class="btn" onclick="saveConfig()">保存设置</button>
@@ -157,6 +163,7 @@
       badge.innerHTML = ''; badge.textContent = logoText;
       aboutLogo.innerHTML = ''; aboutLogo.textContent = logoText;
     }
+    renderNav(cfg);
   }
 
   async function checkAuth(){
@@ -202,6 +209,11 @@
     document.getElementById('sIntro').value = CONFIG.intro || '';
     document.getElementById('sFooter').value = CONFIG.footer_text || '';
     renderCarouselEditor(CONFIG.carousel || []);
+    renderNavEditor(CONFIG.nav || []);
+    document.getElementById('dName').value = CONFIG.drive_name || '';
+    document.getElementById('dDesc').value = CONFIG.drive_desc || '';
+    document.getElementById('dUrl').value = CONFIG.drive_url || '';
+    renderDriveEditor(CONFIG.drive_items || []);
   }
 
   function renderCarouselEditor(list){
@@ -299,7 +311,12 @@
       slogan: document.getElementById('sSlogan').value.trim(),
       intro: document.getElementById('sIntro').value.trim(),
       footer_text: document.getElementById('sFooter').value.trim(),
-      carousel: collectCarousel()
+      carousel: collectCarousel(),
+      nav: collectNav(),
+      drive_name: document.getElementById('dName').value.trim(),
+      drive_desc: document.getElementById('dDesc').value.trim(),
+      drive_url: document.getElementById('dUrl').value.trim(),
+      drive_items: collectDrive()
     };
     try {
       const r = await fetch('/api/config', {
@@ -337,7 +354,130 @@
     if (ok) showSettings();
     else if (location.hash === '#login') showLogin();
   }
+
+  // 导航栏编辑器
+  function renderNavEditor(list){
+    const box = document.getElementById('navEditor');
+    box.innerHTML = '';
+    (list && list.length ? list : []).forEach((n, i) => addNavRow(n, i));
+  }
+  function addNavRow(data, idx){
+    const box = document.getElementById('navEditor');
+    const row = document.createElement('div');
+    row.className = 'field';
+    row.style.cssText = 'border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:#fbfcfe';
+    const d = data || {label:'', url:'', external:0};
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-size:13px">导航按钮 ${(typeof idx==='number'?idx:box.children.length)+1}</strong>
+        <div style="display:flex;gap:6px">
+          <button type="button" style="background:#eef1f6;color:var(--text-2);border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer" onclick="moveNav(this,-1)">上移</button>
+          <button type="button" style="background:#eef1f6;color:var(--text-2);border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer" onclick="moveNav(this,1)">下移</button>
+          <button type="button" style="background:var(--danger-soft);color:var(--danger);border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer" onclick="this.closest('.field').remove()">删除</button>
+        </div>
+      </div>
+      <label style="font-size:12px;color:var(--text-3)">名称</label>
+      <input class="n-label" value="${(d.label||'').replace(/"/g,'&quot;')}" placeholder="如：首页" style="margin-bottom:6px">
+      <label style="font-size:12px;color:var(--text-3)">跳转地址</label>
+      <div style="display:flex;gap:6px">
+        <input class="n-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="/apps.html 或 https://..." style="flex:1">
+        <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3);white-space:nowrap;cursor:pointer">
+          <input type="checkbox" class="n-ext" ${d.external?'checked':''} style="width:auto">外链
+        </label>
+      </div>
+    `;
+    box.appendChild(row);
+  }
+  function moveNav(btn, dir){
+    const row = btn.closest('.field');
+    const box = row.parentNode;
+    const idx = Array.prototype.indexOf.call(box.children, row);
+    const to = idx + dir;
+    if (to < 0 || to >= box.children.length) return;
+    box.insertBefore(row, box.children[to > idx ? to + 1 : to]);
+  }
+  function collectNav(){
+    const rows = document.querySelectorAll('#navEditor .field');
+    const arr = [];
+    rows.forEach(r => {
+      const label = r.querySelector('.n-label').value.trim();
+      const url = r.querySelector('.n-url').value.trim();
+      const external = r.querySelector('.n-ext').checked ? 1 : 0;
+      if (label && url) arr.push({label, url, external});
+    });
+    return arr;
+  }
+
+  // 网盘编辑器
+  function renderDriveEditor(list){
+    const box = document.getElementById('driveEditor');
+    box.innerHTML = '';
+    (list && list.length ? list : []).forEach((d, i) => addDriveRow(d, i));
+  }
+  function addDriveRow(data, idx){
+    const box = document.getElementById('driveEditor');
+    const row = document.createElement('div');
+    row.className = 'field';
+    row.style.cssText = 'border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;background:#fbfcfe';
+    const d = data || {name:'', desc:'', color:'#2f6fed', url:''};
+    row.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-size:13px">分类 ${(typeof idx==='number'?idx:box.children.length)+1}</strong>
+        <button type="button" style="background:var(--danger-soft);color:var(--danger);border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer" onclick="this.closest('.field').remove()">删除</button>
+      </div>
+      <label style="font-size:12px;color:var(--text-3)">名称</label>
+      <input class="di-name" value="${(d.name||'').replace(/"/g,'&quot;')}" placeholder="如：常用软件" style="margin-bottom:6px">
+      <label style="font-size:12px;color:var(--text-3)">简介</label>
+      <input class="di-desc" value="${(d.desc||'').replace(/"/g,'&quot;')}" style="margin-bottom:6px">
+      <label style="font-size:12px;color:var(--text-3)">图标颜色 / 跳转链接（可留空）</label>
+      <div style="display:flex;gap:6px">
+        <input type="color" class="di-color" value="${d.color||'#2f6fed'}">
+        <input class="di-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="点击跳转外链" style="flex:1">
+      </div>
+    `;
+    box.appendChild(row);
+  }
+  function collectDrive(){
+    const rows = document.querySelectorAll('#driveEditor .field');
+    const arr = [];
+    rows.forEach(r => {
+      const name = r.querySelector('.di-name').value.trim();
+      const desc = r.querySelector('.di-desc').value.trim();
+      const color = r.querySelector('.di-color').value || '#2f6fed';
+      const url = r.querySelector('.di-url').value.trim();
+      if (name) arr.push({name, desc, color, url});
+    });
+    return arr;
+  }
+
+
   init();
+
+  const DEFAULT_NAV = [
+    { label: '首页', url: '/' },
+    { label: '全部文章', url: '/articles.html' },
+    { label: '软件', url: '/apps.html' },
+    { label: '教程', url: '/tutorials.html' },
+    { label: '关于', url: '/about.html' },
+    { label: '网盘', url: '/drive.html' },
+    { label: '链接', url: '/links.html' }
+  ];
+
+  function renderNav(cfg){
+    const menu = document.getElementById('navMenu');
+    if (!menu) return;
+    const nav = (cfg.nav && cfg.nav.length) ? cfg.nav : DEFAULT_NAV;
+    const cur = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
+    menu.innerHTML = nav.map(n => {
+      const href = n.url || '/';
+      const target = (href === '/' ? '' : (href.split('?')[0].split('/').pop().replace(/\.html$/, '') || 'index'));
+      const active = (target === cur) ? ' class="active"' : '';
+      const ext = n.external ? ' target="_blank" rel="noopener"' : '';
+      return '<a href="' + href.replace(/"/g, '&quot;') + '"' + active + ext + '>' +
+             String(n.label || '').replace(/</g, '&lt;') + '</a>';
+    }).join('');
+  }
+
 </script>
 <!-- 隐藏的文件选择器 -->
 <input type="file" id="carouselFileInput" style="display:none" accept="image/*">

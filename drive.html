@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网盘 · cxkk 技术小站</title>
+<meta name="description" content="cxkk 技术小站网盘资源">
+<style>
+  :root{
+    --bg:#eef4fb;--card:#fff;--primary:#2f6fed;--primary-soft:#e4edfd;
+    --text:#1f2d3d;--text-2:#5a6b7f;--text-3:#8a9ab0;--border:#e3ebf6;
+    --radius:12px;--shadow:0 2px 10px rgba(47,111,237,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav-inner{max-width:1180px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:28px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;color:var(--primary)}
+  .logo-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2f6fed,#5aa0ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:800;overflow:hidden}
+  .logo-badge img{width:100%;height:100%;object-fit:cover}
+  .nav-menu{display:flex;gap:22px;font-size:15px;color:var(--text-2)}
+  .nav-menu a:hover{color:var(--primary)}
+  .nav-menu a.active{color:var(--primary);font-weight:600}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+  .nav-btn{background:var(--primary);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:14px;cursor:pointer}
+  .nav-btn:hover{opacity:.9}
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 40px}
+  .page-head h1{font-size:24px;margin-bottom:6px}
+  .page-head .sub{font-size:13px;color:var(--text-3);margin-bottom:16px}
+
+  .drive-hero{background:linear-gradient(135deg,#2f6fed,#5aa0ff);border-radius:16px;padding:40px 32px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden}
+  .drive-hero h2{font-size:26px;margin-bottom:8px}
+  .drive-hero p{font-size:14px;opacity:.9;margin-bottom:20px;max-width:640px;word-break:break-word}
+  .drive-open{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--primary);border:none;padding:11px 24px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+  .drive-open:hover{transform:translateY(-2px)}
+  .drive-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+  .drive-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;cursor:pointer;transition:.18s}
+  .drive-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(47,111,237,.12);border-color:var(--primary)}
+  .drive-ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:700;flex-shrink:0}
+  .drive-card h4{font-size:15px;font-weight:600;margin-bottom:3px}
+  .drive-card p{font-size:12.5px;color:var(--text-3);word-break:break-all}
+  .drive-card:hover h4{color:var(--primary)}
+  .empty{text-align:center;color:var(--text-3);padding:60px 0}
+  footer{border-top:1px solid var(--border);background:var(--card);padding:26px 20px;text-align:center;color:var(--text-3);font-size:13px}
+  footer .brand{color:var(--text-2);font-weight:600}
+  @media (max-width:900px){.nav-menu{display:none}}
+  @media (max-width:560px){.drive-hero{padding:28px 20px}.drive-hero h2{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-badge" id="logoBadge">cx</span>
+      <span id="siteName">cxkk</span>
+    </a>
+    <nav class="nav-menu" id="navMenu"></nav>
+    <div class="nav-right">
+      <a class="nav-btn" href="/about.html#login">登录</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>网盘</h1>
+    <div class="sub">软件资源 · 系统镜像 · 工具合集</div>
+  </div>
+
+  <div class="drive-hero">
+    <h2 id="driveName">资源网盘</h2>
+    <p id="driveDesc">网盘内收录本站常用软件、系统镜像与装机工具，点击下方按钮进入网盘浏览下载。</p>
+    <a id="driveOpen" class="drive-open" style="display:none" target="_blank" rel="noopener">打开网盘 ↗</a>
+  </div>
+
+  <div class="drive-list" id="driveList"></div>
+</div>
+
+<footer>
+  <p><span class="brand" id="footerText">© 2023-2026 By cxkk</span> &nbsp;·&nbsp; 保持热爱，折腾不止</p>
+</footer>
+
+<script>
+  let CFG = {};
+  const DEFAULT_DRIVE = [
+    { name: '常用软件', desc: '驱动、激活、装机常用工具合集', color: '#2f6fed', url: '' },
+    { name: '系统镜像', desc: 'Windows 11 / 10 原版精简镜像', color: '#16a34a', url: '' },
+    { name: 'PE 维护工具', desc: 'FirPE / 小南瓜 PE 维护盘', color: '#e5484d', url: '' }
+  ];
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function applyConfig(cfg){
+    if (!cfg) return;
+    CFG = cfg;
+    if (cfg.name) {
+      document.getElementById('siteName').textContent = cfg.name;
+      document.title = document.title.replace('cxkk', cfg.name);
+    }
+    if (cfg.footer_text) document.getElementById('footerText').textContent = cfg.footer_text;
+    if (cfg.drive_name) document.getElementById('driveName').textContent = cfg.drive_name;
+    if (cfg.drive_desc) document.getElementById('driveDesc').textContent = cfg.drive_desc;
+    const badge = document.getElementById('logoBadge');
+    if (cfg.logo_url) {
+      badge.innerHTML = '<img src="' + esc(cfg.logo_url) + '" alt="logo" style="width:100%;height:100%;object-fit:cover">';
+    } else {
+      badge.innerHTML = '';
+      badge.textContent = (cfg.logo_text || cfg.name || 'cx').slice(0, 2);
+    }
+    renderNav(cfg);
+    // 网盘外链按钮
+    const openBtn = document.getElementById('driveOpen');
+    if (cfg.drive_url) {
+      openBtn.href = cfg.drive_url;
+      openBtn.style.display = 'inline-flex';
+    } else {
+      openBtn.style.display = 'none';
+    }
+    renderDrive(Array.isArray(cfg.drive_items) ? cfg.drive_items : []);
+  }
+
+  const DEFAULT_NAV = [
+    { label: '首页', url: '/' },
+    { label: '全部文章', url: '/articles.html' },
+    { label: '软件', url: '/apps.html' },
+    { label: '教程', url: '/tutorials.html' },
+    { label: '关于', url: '/about.html' },
+    { label: '网盘', url: '/drive.html' },
+    { label: '链接', url: '/links.html' }
+  ];
+
+  function renderNav(cfg){
+    const menu = document.getElementById('navMenu');
+    if (!menu) return;
+    const nav = (cfg.nav && cfg.nav.length) ? cfg.nav : DEFAULT_NAV;
+    const cur = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
+    menu.innerHTML = nav.map(n => {
+      const href = n.url || '/';
+      const target = (href === '/' ? '' : (href.split('?')[0].split('/').pop().replace(/\.html$/, '') || 'index'));
+      const active = (target === cur) ? ' class="active"' : '';
+      const ext = n.external ? ' target="_blank" rel="noopener"' : '';
+      return '<a href="' + esc(href) + '"' + active + ext + '>' + esc(n.label) + '</a>';
+    }).join('');
+  }
+
+  function renderDrive(items){
+    const box = document.getElementById('driveList');
+    box.innerHTML = '';
+    const list = items.length ? items : DEFAULT_DRIVE;
+    list.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'drive-card';
+      const ic = document.createElement('div');
+      ic.className = 'drive-ic';
+      ic.style.background = d.color || '#2f6fed';
+      ic.textContent = (d.name || '?').slice(0, 1).toUpperCase();
+      const t = document.createElement('div');
+      t.innerHTML = '<h4>' + esc(d.name) + '</h4><p>' + esc(d.desc) + '</p>';
+      el.appendChild(ic); el.appendChild(t);
+      el.onclick = () => {
+        if (d.url) window.open(d.url, '_blank');
+      };
+      box.appendChild(el);
+    });
+  }
+
+  async function init(){
+    try {
+      const r = await fetch('/api/site', { cache: 'no-store' });
+      const d = await r.json();
+      if (d.config) applyConfig(d.config);
+    } catch(e) {
+      applyConfig({});
+      renderDrive([]);
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

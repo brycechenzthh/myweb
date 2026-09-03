@@ -154,16 +154,9 @@
       <span class="logo-badge" id="logoBadge">cx</span>
       <span id="siteName">cxkk</span>
     </a>
-    <nav class="nav-menu">
-      <a href="/">首页</a>
-      <a href="/articles.html">全部文章</a>
-      <a href="/apps.html">软件</a>
-      <a href="/tutorials.html">教程</a>
-      <a href="/about.html">关于</a>
-    </nav>
+    <nav class="nav-menu" id="navMenu"></nav>
     <div class="nav-right">
-      <a class="nav-link active" href="/links.html">链接</a>
-      <a class="nav-btn" href="/about.html#login">登录</a>
+<a class="nav-btn" href="/about.html#login">登录</a>
     </div>
   </div>
 </header>
@@ -246,6 +239,7 @@
       } else {
         badge.innerHTML = '';
         badge.textContent = (cfg.logo_text || cfg.name || 'cx').slice(0, 2);
+    renderNav(cfg);
       }
     } catch(e) {}
   }
@@ -476,6 +470,32 @@
   document.getElementById('btnAdd').addEventListener('click', addForm);
   document.getElementById('loginPwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   init();
+
+  const DEFAULT_NAV = [
+    { label: '首页', url: '/' },
+    { label: '全部文章', url: '/articles.html' },
+    { label: '软件', url: '/apps.html' },
+    { label: '教程', url: '/tutorials.html' },
+    { label: '关于', url: '/about.html' },
+    { label: '网盘', url: '/drive.html' },
+    { label: '链接', url: '/links.html' }
+  ];
+
+  function renderNav(cfg){
+    const menu = document.getElementById('navMenu');
+    if (!menu) return;
+    const nav = (cfg.nav && cfg.nav.length) ? cfg.nav : DEFAULT_NAV;
+    const cur = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
+    menu.innerHTML = nav.map(n => {
+      const href = n.url || '/';
+      const target = (href === '/' ? '' : (href.split('?')[0].split('/').pop().replace(/\.html$/, '') || 'index'));
+      const active = (target === cur) ? ' class="active"' : '';
+      const ext = n.external ? ' target="_blank" rel="noopener"' : '';
+      return '<a href="' + href.replace(/"/g, '&quot;') + '"' + active + ext + '>' +
+             String(n.label || '').replace(/</g, '&lt;') + '</a>';
+    }).join('');
+  }
+
 </script>
 </body>
 </html>

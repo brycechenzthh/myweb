@@ -26,6 +26,23 @@ const DEFAULT_CONFIG = {
   slogan: '保持热爱，折腾不止',
   intro: '本站为个人技术分享站：软件工具、装机教程、系统激活、硬件知识。',
   footer_text: '© 2023-2026 By cxkk · 保持热爱，折腾不止',
+  nav: [
+    { label: '首页', url: '/', external: 0 },
+    { label: '全部文章', url: '/articles.html', external: 0 },
+    { label: '软件', url: '/apps.html', external: 0 },
+    { label: '教程', url: '/tutorials.html', external: 0 },
+    { label: '关于', url: '/about.html', external: 0 },
+    { label: '网盘', url: '/drive.html', external: 0 },
+    { label: '链接', url: '/links.html', external: 0 }
+  ],
+  drive_name: '资源网盘',
+  drive_desc: '网盘内收录本站常用软件、系统镜像与装机工具，点击下方按钮进入网盘浏览下载。',
+  drive_url: '',
+  drive_items: [
+    { name: '常用软件', desc: '驱动、激活、装机常用工具合集', color: '#2f6fed', url: '' },
+    { name: '系统镜像', desc: 'Windows 11 / 10 原版精简镜像', color: '#16a34a', url: '' },
+    { name: 'PE 维护工具', desc: 'FirPE / 小南瓜 PE 维护盘', color: '#e5484d', url: '' }
+  ],
   carousel: [
     { img: '', title: '显卡驱动升级助手', desc: '一键检测并升级 NVIDIA / AMD 显卡驱动', url: '' },
     { img: '', title: 'PE 系统制作系统 U 盘', desc: '三步制作可启动 PE 维护 U 盘', url: '' },
@@ -218,7 +235,7 @@ export default {
       try {
         const body = await request.json();
         const current = await getConfig(env);
-        const allowed = ['name', 'logo_text', 'logo_url', 'slogan', 'intro', 'footer_text'];
+        const allowed = ['name', 'logo_text', 'logo_url', 'slogan', 'intro', 'footer_text', 'drive_name', 'drive_desc', 'drive_url'];
         allowed.forEach(k => {
           if (typeof body[k] === 'string') current[k] = body[k].slice(0, 300);
         });
@@ -229,6 +246,21 @@ export default {
             desc: String(x.desc || '').slice(0, 200),
             url: String(x.url || '').slice(0, 500)
           }));
+        }
+        if (Array.isArray(body.nav)) {
+          current.nav = body.nav.slice(0, 20).map(x => ({
+            label: String(x.label || '').slice(0, 30),
+            url: String(x.url || '').slice(0, 500),
+            external: x.external ? 1 : 0
+          })).filter(x => x.label.length > 0);
+        }
+        if (Array.isArray(body.drive_items)) {
+          current.drive_items = body.drive_items.slice(0, 20).map(x => ({
+            name: String(x.name || '').slice(0, 40),
+            desc: String(x.desc || '').slice(0, 200),
+            color: String(x.color || '#2f6fed').slice(0, 30),
+            url: String(x.url || '').slice(0, 500)
+          })).filter(x => x.name.length > 0);
         }
         await env.LINKS_KV.put('site_config', JSON.stringify(current));
         return json({ ok: true, config: current });
