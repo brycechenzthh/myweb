@@ -380,7 +380,7 @@
       <input class="n-label" value="${(d.label||'').replace(/"/g,'&quot;')}" placeholder="如：首页" style="margin-bottom:6px">
       <label style="font-size:12px;color:var(--text-3)">跳转地址</label>
       <div style="display:flex;gap:6px">
-        <input class="n-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="/apps.html 或 https://..." style="flex:1">
+        <input class="n-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="/apps.html 或 https://..." style="flex:1;width:auto">
         <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3);white-space:nowrap;cursor:pointer">
           <input type="checkbox" class="n-ext" ${d.external?'checked':''} style="width:auto">外链
         </label>
@@ -429,11 +429,13 @@
       <input class="di-name" value="${(d.name||'').replace(/"/g,'&quot;')}" placeholder="如：常用软件" style="margin-bottom:6px">
       <label style="font-size:12px;color:var(--text-3)">简介</label>
       <input class="di-desc" value="${(d.desc||'').replace(/"/g,'&quot;')}" style="margin-bottom:6px">
-      <label style="font-size:12px;color:var(--text-3)">图标颜色 / 跳转链接（可留空）</label>
-      <div style="display:flex;gap:6px">
-        <input type="color" class="di-color" value="${d.color||'#2f6fed'}">
-        <input class="di-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="点击跳转外链" style="flex:1">
+      <label style="font-size:12px;color:var(--text-3)">图标颜色</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="color" class="di-color" value="${d.color||'#2f6fed'}" style="width:46px;height:40px;padding:3px;border:1px solid var(--border);border-radius:8px;background:#fff;flex-shrink:0;cursor:pointer;min-width:46px">
+        <span style="font-size:12px;color:var(--text-3)">点击色块选择</span>
       </div>
+      <label style="font-size:12px;color:var(--text-3);margin-top:6px;display:block">跳转链接（可留空；点击分类卡片后打开）</label>
+      <input class="di-url" value="${(d.url||'').replace(/"/g,'&quot;')}" placeholder="https://... 或 /pages.html" style="width:100%">
     `;
     box.appendChild(row);
   }
