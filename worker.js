@@ -90,7 +90,8 @@ export default {
           const clean = body
             .map(x => ({
               label: String(x.label || '').slice(0, 50),
-              value: String(x.value || '').slice(0, 500)
+              value: String(x.value || '').slice(0, 500),
+              show: x.show ? 1 : 0
             }))
             .filter(x => x.value.length > 0);
           await env.LINKS_KV.put('links', JSON.stringify(clean));
