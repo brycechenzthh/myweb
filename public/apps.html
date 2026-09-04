@@ -224,7 +224,11 @@
     <h3 id="formTitle">添加软件</h3>
     <div class="form-grid">
       <input id="fName" placeholder="软件名称（如 微信）" maxlength="60">
-      <input id="fIcon" placeholder="图标链接（可选，留空自动生成）" maxlength="500">
+      <div style="display:flex;gap:6px">
+        <input id="fIcon" placeholder="图标（图片链接 / emoji，可留空）" maxlength="500" style="flex:1;min-width:0">
+        <button type="button" class="btn-sm ghost" style="white-space:nowrap" onclick="document.getElementById('iconFileInput').click()">上传</button>
+      </div>
+      <input type="file" id="iconFileInput" style="display:none" accept="image/*">
       <input id="fUrl" placeholder="下载链接（必填）" maxlength="500">
       <input id="fDownloads" placeholder="下载量，如 135.41万（可选）" maxlength="30">
       <input id="fTag" placeholder="标签（可选，如 无广告 / TOP）" maxlength="20" class="full">
@@ -381,12 +385,20 @@
       const icon = document.createElement('div');
       icon.className = 'app-icon';
       if (item.icon) {
-        const img = document.createElement('img');
-        img.src = item.icon;
-        img.loading = 'lazy';
-        img.alt = item.name;
-        img.onerror = () => { img.replaceWith(makePh(item.name)); };
-        icon.appendChild(img);
+        if (/^(https?:|\/file\/)/i.test(item.icon)) {
+          const img = document.createElement('img');
+          img.src = item.icon;
+          img.loading = 'lazy';
+          img.alt = item.name;
+          img.onerror = () => { img.replaceWith(makePh(item.name)); };
+          icon.appendChild(img);
+        } else {
+          const em = makePh(item.name);
+          em.textContent = item.icon;
+          em.style.fontSize = '30px';
+          em.style.background = '#fff';
+          icon.appendChild(em);
+        }
       } else {
         icon.appendChild(makePh(item.name));
       }
@@ -524,6 +536,31 @@
     render();
     await save();
   }
+
+  // 图标本地上传
+  document.addEventListener('DOMContentLoaded', () => {
+    const fi = document.getElementById('iconFileInput');
+    if (!fi) return;
+    fi.addEventListener('change', async () => {
+      const file = fi.files[0];
+      const iconBox = document.getElementById('fIcon');
+      if (!file || !iconBox) return;
+      if (file.size > 25 * 1024 * 1024) { alert('图片不能超过 25MB'); return; }
+      const orig = iconBox.value;
+      iconBox.value = '上传中...';
+      try {
+        const r = await fetch('/api/upload?name=' + encodeURIComponent(file.name), {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + TOKEN, 'X-File-Type': file.type },
+          body: file
+        });
+        const d = await r.json();
+        if (d.ok) { iconBox.value = d.url; alert('图标上传成功'); }
+        else { iconBox.value = orig; alert('上传失败'); }
+      } catch(e) { iconBox.value = orig; alert('上传失败，请重试'); }
+      fi.value = '';
+    });
+  });
 
   async function delItem(i){
     if (!confirm('确定删除「' + (APPS[i].name || '') + '」吗？')) return;
