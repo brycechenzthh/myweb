@@ -343,7 +343,7 @@
           ic.style.background = '#fff';
           const im = document.createElement('img');
           im.src = item.icon; im.alt = ''; im.loading = 'lazy';
-          im.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:11px';
+          im.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:11px;padding:6px';
           im.onerror = () => { ic.innerHTML = ''; ic.style.background = palette[h % palette.length]; ic.textContent = name.slice(0, 1).toUpperCase(); };
           ic.appendChild(im);
         } else {
