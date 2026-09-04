@@ -96,6 +96,11 @@
     .nav-menu a:last-child{border-bottom:none}
   }
 
+
+  .nav-quick{display:flex;align-items:center;gap:2px;margin-right:4px}
+  .nav-quick a{font-size:14px;color:var(--text-2);padding:6px 10px;border-radius:8px;text-decoration:none}
+  .nav-quick a:hover{color:var(--primary);background:var(--primary-soft)}
+  @media (max-width:900px){.nav-quick a{font-size:12.5px;padding:5px 7px}}
 </style>
 </head>
 <body>
@@ -107,6 +112,7 @@
     </a>
     <nav class="nav-menu" id="navMenu"></nav>
     <div class="nav-right">
+      <span class="nav-quick" id="navQuick"></span>
       <button class="nav-toggle" id="navToggle" onclick="toggleNav()">☰</button>
 <a class="nav-btn" href="javascript:void(0)" onclick="showLogin()">登录</a>
     </div>
@@ -370,9 +376,20 @@
   function renderNav(cfg){
     const menu = document.getElementById('navMenu');
     if (!menu) return;
+    const quick = document.getElementById('navQuick');
     const nav = (cfg.nav && cfg.nav.length) ? cfg.nav : DEFAULT_NAV;
     const cur = (location.pathname.split('/').pop() || 'index').replace(/\.html$/, '');
-    menu.innerHTML = nav.map(n => {
+    const isQuick = n => /drive\.html/.test(n.url || '') || /links\.html/.test(n.url || '');
+    if (quick) {
+      quick.innerHTML = nav.filter(isQuick).map(n => {
+        const href = n.url || '/';
+        const ext = n.external ? ' target="_blank" rel="noopener"' : '';
+        return '<a href="' + href.replace(/"/g, '&quot;') + '"' + ext + '>' +
+               String(n.label || '').replace(/</g, '&lt;') + '</a>';
+      }).join('');
+    }
+    const rest = nav.filter(n => !isQuick(n));
+    menu.innerHTML = rest.map(n => {
       const href = n.url || '/';
       const target = (href === '/' ? '' : (href.split('?')[0].split('/').pop().replace(/\.html$/, '') || 'index'));
       const active = (target === cur) ? ' class="active"' : '';
