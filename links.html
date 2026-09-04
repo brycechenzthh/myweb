@@ -312,6 +312,34 @@
     render();
   }
 
+  function trimIconWhite(img){
+    try {
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth || img.width;
+      c.height = img.naturalHeight || img.height;
+      if (!c.width || !c.height) return;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const w = c.width, h = c.height;
+      const d = ctx.getImageData(0, 0, w, h).data;
+      const TH = 240;
+      const isW = (x, y) => { const i = (y * w + x) * 4; return d[i] >= TH && d[i+1] >= TH && d[i+2] >= TH; };
+      let L = 0, R = w - 1, T = 0, B = h - 1;
+      while (L < w) { let all = true; for (let y = 0; y < h; y++) { if (!isW(L, y)) { all = false; break; } } if (!all) break; L++; }
+      while (R >= L) { let all = true; for (let y = 0; y < h; y++) { if (!isW(R, y)) { all = false; break; } } if (!all) break; R--; }
+      while (T < h) { let all = true; for (let x = 0; x < w; x++) { if (!isW(x, T)) { all = false; break; } } if (!all) break; T++; }
+      while (B >= T) { let all = true; for (let x = 0; x < w; x++) { if (!isW(x, B)) { all = false; break; } } if (!all) break; B--; }
+      if (L >= R || T >= B) return;
+      const cw = R - L + 1, ch = B - T + 1;
+      if (cw >= w && ch >= h) return;
+      const c2 = document.createElement('canvas');
+      c2.width = cw; c2.height = ch;
+      c2.getContext('2d').drawImage(img, L, T, cw, ch, 0, 0, cw, ch);
+      img.src = c2.toDataURL('image/png');
+    } catch(e) {}
+  }
+
+
   function render(){
     const box = document.getElementById('list');
     box.innerHTML = '';
@@ -344,6 +372,7 @@
           const im = document.createElement('img');
           im.src = item.icon; im.alt = ''; im.loading = 'lazy';
           im.style.cssText = 'width:100%;height:100%;object-fit:contain;border-radius:11px;padding:6px';
+          im.onload = () => trimIconWhite(im);
           im.onerror = () => { ic.innerHTML = ''; ic.style.background = palette[h % palette.length]; ic.textContent = name.slice(0, 1).toUpperCase(); };
           ic.appendChild(im);
         } else {
