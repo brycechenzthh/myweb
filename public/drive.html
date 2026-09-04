@@ -44,8 +44,18 @@
   .empty{text-align:center;color:var(--text-3);padding:60px 0}
   footer{border-top:1px solid var(--border);background:var(--card);padding:26px 20px;text-align:center;color:var(--text-3);font-size:13px}
   footer .brand{color:var(--text-2);font-weight:600}
-  @media (max-width:900px){.nav-menu{display:none}}
+  
   @media (max-width:560px){.drive-hero{padding:28px 20px}.drive-hero h2{font-size:21px}}
+
+  .nav-toggle{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-2);line-height:1;padding:4px 2px}
+  @media (max-width:900px){
+    .nav-toggle{display:block}
+    .nav-menu{display:none;position:absolute;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);flex-direction:column;padding:8px 20px;box-shadow:0 10px 24px rgba(20,40,80,.12);z-index:99}
+    .nav-menu.open{display:flex}
+    .nav-menu a{padding:13px 4px;border-bottom:1px dashed var(--border);font-size:15px}
+    .nav-menu a:last-child{border-bottom:none}
+  }
+
 </style>
 </head>
 <body>
@@ -57,6 +67,7 @@
     </a>
     <nav class="nav-menu" id="navMenu"></nav>
     <div class="nav-right">
+      <button class="nav-toggle" id="navToggle" onclick="toggleNav()">☰</button>
       <a class="nav-btn" href="/about.html#login">登录</a>
     </div>
   </div>
@@ -179,6 +190,17 @@
   }
 
   init();
+
+  function toggleNav(){
+    const m = document.getElementById('navMenu');
+    if (m) m.classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const m = document.getElementById('navMenu');
+    const t = document.getElementById('navToggle');
+    if (m && t && !m.contains(e.target) && !t.contains(e.target)) m.classList.remove('open');
+  });
+
 </script>
 </body>
 </html>
