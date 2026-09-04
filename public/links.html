@@ -194,6 +194,13 @@
       <input id="fLabel" placeholder="名称（如 WIN11 / 激活命令）" maxlength="50">
       <input id="fValue" placeholder="链接地址或终端命令" maxlength="500">
     </div>
+    <div class="form-row">
+      <div style="display:flex;gap:6px;width:100%">
+        <input id="fIcon" placeholder="图标（可留空：图片链接或 emoji，如 🖥️）" maxlength="500" style="flex:1;min-width:220px;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;background:#fbfcfe">
+        <button type="button" class="btn-sm ghost" style="white-space:nowrap" onclick="document.getElementById('iconFileInput').click()">上传</button>
+      </div>
+    </div>
+    <input type="file" id="iconFileInput" style="display:none" accept="image/*">
     <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);margin-top:10px;cursor:pointer">
       <input type="checkbox" id="fShow" style="width:auto"> 在列表中显示具体内容
     </label>
@@ -324,15 +331,30 @@
       handle.title = editMode ? '拖拽调整顺序' : '';
       handle.style.display = editMode ? '' : 'none';
 
-      // 彩色首字母图标（辨识度）
+      // 图标：优先自定义（图片链接或 emoji），留空用彩色首字母
       const name = item.label || '未命名';
       const ic = document.createElement('div');
       ic.className = 'i-icon';
       const palette = ['#2f6fed','#16a34a','#e5484d','#b45bcf','#f59e0b','#0ea5e9','#ef4444','#22c55e','#8b5cf6','#ec4899'];
       let h = 0;
       for (let k = 0; k < name.length; k++) h = (h * 31 + name.charCodeAt(k)) >>> 0;
-      ic.style.background = palette[h % palette.length];
-      ic.textContent = name.slice(0, 1).toUpperCase();
+      if (item.icon) {
+        if (/^(https?:|\/file\/)/i.test(item.icon)) {
+          ic.style.background = '#fff';
+          const im = document.createElement('img');
+          im.src = item.icon; im.alt = ''; im.loading = 'lazy';
+          im.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:11px';
+          im.onerror = () => { ic.innerHTML = ''; ic.style.background = palette[h % palette.length]; ic.textContent = name.slice(0, 1).toUpperCase(); };
+          ic.appendChild(im);
+        } else {
+          ic.style.background = palette[h % palette.length];
+          ic.style.fontSize = '20px';
+          ic.textContent = item.icon;
+        }
+      } else {
+        ic.style.background = palette[h % palette.length];
+        ic.textContent = name.slice(0, 1).toUpperCase();
+      }
 
       const lb = document.createElement('div');
       lb.className = 'i-label'; lb.textContent = name;
@@ -435,6 +457,7 @@
     document.getElementById('fLabel').value = LINKS[i].label || '';
     document.getElementById('fValue').value = LINKS[i].value || '';
     document.getElementById('fShow').checked = !!(LINKS[i].show);
+    document.getElementById('fIcon').value = LINKS[i].icon || '';
     showForm();
   }
 
@@ -444,6 +467,7 @@
     document.getElementById('fLabel').value = '';
     document.getElementById('fValue').value = '';
     document.getElementById('fShow').checked = false;
+    document.getElementById('fIcon').value = '';
     showForm();
   }
 
@@ -463,15 +487,41 @@
     const value = document.getElementById('fValue').value.trim();
     if (!value) { alert('请填写链接或命令内容'); return; }
     const show = document.getElementById('fShow').checked ? 1 : 0;
+    const icon = document.getElementById('fIcon').value.trim();
     if (editingIdx >= 0) {
-      LINKS[editingIdx] = { label: label || value, value, show };
+      LINKS[editingIdx] = { label: label || value, value, show, icon };
     } else {
-      LINKS.push({ label: label || value, value, show });
+      LINKS.push({ label: label || value, value, show, icon });
     }
     closeForm();
     render();
     await save();
   }
+
+  // 图标本地上传
+  document.addEventListener('DOMContentLoaded', () => {
+    const fi = document.getElementById('iconFileInput');
+    if (!fi) return;
+    fi.addEventListener('change', async () => {
+      const file = fi.files[0];
+      const iconBox = document.getElementById('fIcon');
+      if (!file || !iconBox) return;
+      if (file.size > 25 * 1024 * 1024) { alert('图片不能超过 25MB'); return; }
+      const orig = iconBox.value;
+      iconBox.value = '上传中...';
+      try {
+        const r = await fetch('/api/upload?name=' + encodeURIComponent(file.name), {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + TOKEN, 'X-File-Type': file.type },
+          body: file
+        });
+        const d = await r.json();
+        if (d.ok) { iconBox.value = d.url; alert('图标上传成功'); }
+        else { iconBox.value = orig; alert('上传失败'); }
+      } catch(e) { iconBox.value = orig; alert('上传失败，请重试'); }
+      fi.value = '';
+    });
+  });
 
   async function delItem(i){
     if (!confirm('确定删除「' + (LINKS[i].label || '') + '」吗？')) return;

@@ -108,7 +108,8 @@ export default {
             .map(x => ({
               label: String(x.label || '').slice(0, 50),
               value: String(x.value || '').slice(0, 500),
-              show: x.show ? 1 : 0
+              show: x.show ? 1 : 0,
+              icon: String(x.icon || '').slice(0, 500)
             }))
             .filter(x => x.value.length > 0);
           await env.LINKS_KV.put('links', JSON.stringify(clean));
