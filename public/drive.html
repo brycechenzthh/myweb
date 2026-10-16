@@ -61,6 +61,13 @@
   .nav-quick a{font-size:14px;color:var(--text-2);padding:6px 10px;border-radius:8px;text-decoration:none}
   .nav-quick a:hover{color:var(--primary);background:var(--primary-soft)}
   @media (max-width:900px){.nav-quick a{font-size:12.5px;padding:5px 7px}}
+
+  .nav-search{display:flex;align-items:center;gap:4px;margin-right:6px}
+  .nav-search input{width:128px;border:1px solid var(--border);border-radius:16px;padding:5px 12px;font-size:13px;background:#fbfcfe;color:var(--text);outline:none;transition:width .2s,border-color .2s}
+  .nav-search input:focus{width:176px;border-color:var(--primary);background:#fff}
+  .nav-search button{background:none;border:none;cursor:pointer;font-size:15px;color:var(--text-2);padding:2px 2px 0 0}
+  .nav-search button:hover{color:var(--primary)}
+  @media (max-width:900px){.nav-search{display:none}}
 </style>
 </head>
 <body>
@@ -72,6 +79,10 @@
     </a>
     <nav class="nav-menu" id="navMenu"></nav>
     <div class="nav-right">
+      <form class="nav-search" onsubmit="return doSearch()">
+        <input id="siteSearch" type="text" placeholder="搜 Puresys 软件" maxlength="60" autocomplete="off">
+        <button type="submit" title="搜索">🔍</button>
+      </form>
       <span class="nav-quick" id="navQuick"></span>
       <button class="nav-toggle" id="navToggle" onclick="toggleNav()">☰</button>
       <a class="nav-btn" href="/about.html#login">登录</a>
@@ -149,7 +160,17 @@
     { label: '链接', url: '/links.html' }
   ];
 
-  function renderNav(cfg){
+    function doSearch(){
+    const v = document.getElementById('siteSearch');
+    if (!v) return false;
+    const kw = v.value.trim();
+    if (!kw) return false;
+    window.open('https://www.puresys.net/?s=' + encodeURIComponent(kw), '_blank');
+    v.value = '';
+    return false;
+  }
+
+function renderNav(cfg){
     const menu = document.getElementById('navMenu');
     if (!menu) return;
     const quick = document.getElementById('navQuick');
